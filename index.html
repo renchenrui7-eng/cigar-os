@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cigar OS 工作台 · 全球雪茄参数化知识底座</title>
+<meta name="description" content="Cigar OS 工作台 —— 663 实体 / 309 型号 / 6962 三元组的雪茄参数化知识底座。智能品鉴推荐、配餐顾问、养护诊断、收藏投资雷达、知识图谱探索。">
+<meta name="theme-color" content="#16130f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cigar OS">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{
+  --bg:#16130f; --bg2:#1d1914; --panel:#242019; --panel2:#2b2620;
+  --line:#3a332a; --line2:#4a4136;
+  --gold:#c9a06a; --gold2:#e0bd8a; --goldDim:#8a7048;
+  --text:#e9e1d3; --text2:#b5a893; --text3:#877a66;
+  --red:#d46a5a; --green:#7fae7a; --blue:#7a9cc9; --purple:#a98ac9;
+  --shadow:0 4px 24px rgba(0,0,0,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",-apple-system,sans-serif;font-size:14px;line-height:1.6}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--goldDim)}
+
+/* ===== Header ===== */
+header{background:linear-gradient(180deg,#221d15 0%,#1a1610 100%);border-bottom:1px solid var(--line);padding:0 28px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.hwrap{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:22px;height:62px}
+.logo{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.logo .ring{width:34px;height:34px;border:2.5px solid var(--gold);border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.logo .ring::after{content:"";width:12px;height:12px;background:var(--gold);border-radius:50%}
+.logo h1{font-size:17px;color:var(--gold2);letter-spacing:1px;font-weight:700}
+.logo small{display:block;font-size:10px;color:var(--text3);letter-spacing:2px;font-weight:400}
+nav{display:flex;gap:2px;flex:1;overflow-x:auto}
+nav button{background:none;border:none;color:var(--text2);padding:8px 14px;font-size:13.5px;cursor:pointer;border-radius:8px;white-space:nowrap;font-family:inherit;transition:.15s}
+nav button:hover{color:var(--gold2);background:rgba(201,160,106,.08)}
+nav button.on{color:#1a1610;background:var(--gold);font-weight:700}
+.hstats{display:flex;gap:14px;font-size:11px;color:var(--text3);flex-shrink:0}
+.hstats b{color:var(--gold);font-size:14px;display:block;text-align:center}
+
+main{max-width:1440px;margin:0 auto;padding:24px 28px 90px}
+.page{display:none}
+.page.on{display:block;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== Common ===== */
+h2.pt{font-size:20px;color:var(--gold2);margin-bottom:4px;font-weight:700}
+p.pd{color:var(--text3);font-size:12.5px;margin-bottom:18px}
+.grid{display:grid;gap:14px}
+.cards4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1100px){.cards4{grid-template-columns:repeat(2,1fr)}}
+.stat{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.stat .n{font-size:30px;color:var(--gold2);font-weight:800;font-family:Georgia,serif}
+.stat .l{font-size:12px;color:var(--text2);margin-top:2px}
+.stat .s{font-size:11px;color:var(--text3)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.panel h3{font-size:14.5px;color:var(--gold2);margin-bottom:12px;font-weight:700;letter-spacing:.5px}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--panel2);border:1px solid var(--line2);border-radius:20px;padding:3px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:.13s;user-select:none}
+.chip:hover{border-color:var(--goldDim);color:var(--text)}
+.chip.on{background:var(--gold);color:#1a1610;border-color:var(--gold);font-weight:600}
+select,input[type=text],input[type=search]{background:var(--bg2);border:1px solid var(--line2);color:var(--text);border-radius:8px;padding:7px 11px;font-size:13px;font-family:inherit;outline:none}
+select:focus,input:focus{border-color:var(--goldDim)}
+input[type=range]{accent-color:var(--gold);width:100%}
+.btn{background:var(--gold);color:#1a1610;border:none;border-radius:8px;padding:8px 20px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.btn:hover{background:var(--gold2)}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--goldDim)}
+.btn.ghost:hover{background:rgba(201,160,106,.1)}
+.badge{display:inline-block;border-radius:5px;padding:1px 8px;font-size:11px;font-weight:600}
+.b-full{background:rgba(212,106,90,.18);color:#e89a8d}.b-mf{background:rgba(212,150,90,.18);color:#e9b98d}
+.b-med{background:rgba(201,160,106,.15);color:var(--gold2)}.b-mild{background:rgba(122,156,201,.15);color:#9db9dd}
+.b-ora{background:rgba(122,174,122,.13);color:#9fc79f}
+.b-gold{background:rgba(201,160,106,.22);color:var(--gold2)}
+.b-red{background:rgba(212,106,90,.25);color:#e89a8d}
+.b-lim{background:linear-gradient(90deg,#8a6a2f,#c9a06a);color:#1a1610}
+.muted{color:var(--text3);font-size:12px}
+.tag-flavor{display:inline-block;background:rgba(169,138,201,.12);border:1px solid rgba(169,138,201,.25);color:#c3abd8;border-radius:5px;padding:1px 8px;font-size:11.5px;margin:2px 3px 2px 0;cursor:pointer;transition:.12s}
+.tag-flavor:hover{background:rgba(169,138,201,.28)}
+.tag-flavor.on{background:var(--purple);color:#fff;border-color:var(--purple)}
+
+/* ===== Dashboard ===== */
+.dist-row{display:flex;align-items:center;gap:10px;margin:7px 0}
+.dist-row .lb{width:110px;font-size:12px;color:var(--text2);text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dist-row .bar{flex:1;background:var(--bg2);border-radius:4px;height:16px;overflow:hidden}
+.dist-row .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--goldDim),var(--gold));border-radius:4px}
+.dist-row .num{width:44px;font-size:12px;color:var(--gold2);font-weight:700;flex-shrink:0}
+.dashgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:1000px){.dashgrid{grid-template-columns:1fr}}
+
+/* ===== Library ===== */
+.libtools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.libtools input[type=search]{flex:1;min-width:220px}
+.libtools .cnt{font-size:12px;color:var(--text3);margin-left:auto}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;cursor:pointer;transition:.16s;position:relative;display:flex;flex-direction:column;gap:7px}
+.pcard:hover{border-color:var(--goldDim);transform:translateY(-2px);box-shadow:var(--shadow)}
+.pcard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pcard .nm{font-size:15px;font-weight:700;color:var(--text)}
+.pcard .ca{font-family:Georgia,serif;font-size:24px;font-weight:800;color:var(--gold);flex-shrink:0;line-height:1}
+.pcard .ca small{font-size:9px;color:var(--text3);display:block;text-align:center;font-family:inherit}
+.pcard .brand{font-size:12px;color:var(--gold2)}
+.pcard .meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:var(--text2)}
+.pcard .flv{font-size:11.5px;color:var(--text3);line-height:1.5;max-height:34px;overflow:hidden}
+.pcard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.minibtn{background:none;border:1px solid var(--line2);color:var(--text2);border-radius:6px;padding:2px 10px;font-size:11px;cursor:pointer;font-family:inherit}
+.minibtn:hover{border-color:var(--goldDim);color:var(--gold2)}
+
+/* ===== Modal ===== */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,8,5,.72);z-index:200;overflow-y:auto;padding:40px 20px}
+.modal-bg.on{display:block}
+.modal{max-width:900px;margin:0 auto;background:var(--bg2);border:1px solid var(--line2);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);animation:fadein .2s}
+.modal .mh{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:linear-gradient(180deg,#2a241b,#221d15);border-bottom:1px solid var(--line)}
+.modal .mh h3{font-size:19px;color:var(--gold2)}
+.modal .mh .x{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1}
+.modal .mh .x:hover{color:var(--red)}
+.modal .mb{padding:22px 26px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px}
+.ditem{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:9px 13px}
+.ditem .k{font-size:11px;color:var(--text3)}
+.ditem .v{font-size:13.5px;color:var(--text);font-weight:600}
+.flavorthird{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0 18px}
+@media(max-width:700px){.flavorthird{grid-template-columns:1fr}}
+.ft{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 13px}
+.ft .t{font-size:12px;color:var(--gold2);font-weight:700;margin-bottom:7px;letter-spacing:1px}
+.ft.t2{border-left:3px solid var(--goldDim)}
+.ft.t3{border-left:3px solid var(--gold)}
+.sect{margin-bottom:20px}
+.sect h4{font-size:13px;color:var(--gold);margin-bottom:9px;letter-spacing:1px;border-left:3px solid var(--goldDim);padding-left:9px}
+.kv{display:flex;gap:10px;padding:5px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.kv .k{width:88px;color:var(--text3);flex-shrink:0}
+.kv .v{color:var(--text)}
+
+/* ===== Tasting / pairing results ===== */
+.rec{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin-bottom:11px;display:flex;gap:16px;align-items:flex-start;transition:.15s}
+.rec:hover{border-color:var(--goldDim)}
+.rec .rank{font-family:Georgia,serif;font-size:26px;color:var(--goldDim);width:36px;flex-shrink:0;line-height:1.1;text-align:center;padding-top:3px}
+.rec .body{flex:1}
+.rec .nm{font-size:15.5px;font-weight:700;cursor:pointer}
+.rec .nm:hover{color:var(--gold2)}
+.rec .sub{font-size:12px;color:var(--text2);margin:3px 0 7px}
+.rec .reasons{display:flex;flex-wrap:wrap;gap:6px}
+.rec .rs{font-size:11px;background:rgba(122,174,122,.12);color:#9fc79f;border:1px solid rgba(122,174,122,.22);border-radius:5px;padding:1px 8px}
+.rec .sc{font-family:Georgia,serif;font-size:22px;color:var(--gold2);font-weight:800;flex-shrink:0;text-align:center;line-height:1.2}
+.rec .sc small{display:block;font-size:9px;color:var(--text3);font-weight:400}
+
+/* ===== Grouped flavor picker ===== */
+.flvgroup{margin-bottom:10px}
+.flvgroup .gt{font-size:12px;color:var(--gold);margin-bottom:5px;font-weight:700}
+.flvgroup .gc{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ===== Humidor ===== */
+.humgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.humgrid{grid-template-columns:1fr}}
+.humval{font-family:Georgia,serif;font-size:34px;color:var(--gold2);font-weight:800;text-align:center}
+.diag{border-radius:12px;padding:16px 20px;margin-top:14px;border:1px solid}
+.diag.ok{background:rgba(122,174,122,.08);border-color:rgba(122,174,122,.35)}
+.diag.warn{background:rgba(212,150,90,.08);border-color:rgba(212,150,90,.4)}
+.diag.bad{background:rgba(212,106,90,.1);border-color:rgba(212,106,90,.45)}
+.diag h4{font-size:15px;margin-bottom:8px}
+.diag.ok h4{color:#9fc79f}.diag.warn h4{color:#e9b98d}.diag.bad h4{color:#e89a8d}
+.diag li{margin:5px 0 5px 18px;font-size:13px;color:var(--text2)}
+
+/* ===== Collection table ===== */
+table.ct{width:100%;border-collapse:collapse;font-size:13px}
+.ct th{background:var(--panel2);color:var(--gold2);text-align:left;padding:9px 12px;font-size:12px;letter-spacing:.5px;border-bottom:1px solid var(--line2);position:sticky;top:0}
+.ct td{padding:9px 12px;border-bottom:1px solid var(--line);color:var(--text2)}
+.ct tr:hover td{background:rgba(201,160,106,.05);color:var(--text)}
+.ct .r{font-family:Georgia,serif;font-weight:800;font-size:16px;color:var(--gold)}
+.ct td.nmw{color:var(--text);font-weight:600;cursor:pointer}
+.ct td.nmw:hover{color:var(--gold2)}
+.tablewrap{overflow-x:auto;max-height:70vh;overflow-y:auto;border:1px solid var(--line);border-radius:12px}
+
+/* ===== Graph ===== */
+.gwrap{display:flex;gap:14px}
+.gsearch{flex:1}
+.gnode{margin-top:16px}
+.gnode .ghead{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.gnode .ghead h3{font-size:20px;color:var(--gold2)}
+.gpred{margin-bottom:14px}
+.gpred .pt{font-size:12.5px;color:var(--gold);font-weight:700;margin-bottom:6px;letter-spacing:.5px}
+.gpred .items{display:flex;flex-wrap:wrap;gap:7px}
+.glink{background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:4px 12px;font-size:12.5px;color:var(--text2);cursor:pointer;transition:.13s}
+.glink:hover{border-color:var(--gold);color:var(--gold2)}
+.glink .dir{color:var(--goldDim);font-size:10px;margin:0 3px}
+.gback{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+
+/* ===== Encyclopedia ===== */
+.enav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:13px}
+.ecard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 17px;transition:.14s}
+.ecard:hover{border-color:var(--goldDim)}
+.ecard .nm{font-size:15px;font-weight:700;color:var(--gold2);margin-bottom:2px;cursor:pointer}
+.ecard .nm:hover{text-decoration:underline}
+.ecard .tp{font-size:11px;color:var(--text3);margin-bottom:8px}
+.ecard .kv{font-size:12.5px}
+.ecard .kv .k{width:76px;font-size:11.5px}
+
+/* ===== Compare ===== */
+#ctray{display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,#2a241b,#1a1610);border-top:2px solid var(--gold);z-index:150;padding:12px 28px;box-shadow:0 -6px 30px rgba(0,0,0,.5)}
+#ctray.on{display:block}
+#ctray .inner{max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#ctray .lbl{font-size:12.5px;color:var(--gold2);font-weight:700;flex-shrink:0}
+#ctray .citem{display:flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:4px 12px;font-size:12.5px}
+#ctray .citem .rm{color:var(--text3);cursor:pointer;font-weight:700}
+#ctray .citem .rm:hover{color:var(--red)}
+.cmptable td:first-child{color:var(--gold2);font-weight:600;white-space:nowrap;background:var(--panel2)}
+.cmptable td{vertical-align:top}
+
+/* ===== Empty ===== */
+.empty{padding:60px 20px;text-align:center;color:var(--text3)}
+.empty .big{font-size:40px;margin-bottom:10px}
+footer{text-align:center;color:var(--text3);font-size:11px;padding:30px 0 15px;border-top:1px solid var(--line);margin-top:30px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.row2{grid-template-columns:1fr}}
+.note{font-size:11.5px;color:var(--text3);background:rgba(201,160,106,.06);border-left:3px solid var(--goldDim);padding:8px 13px;border-radius:0 8px 8px 0;margin-top:12px}
+
+/* ===== PWA install & mobile ===== */
+#install-btn{display:none;background:transparent;color:var(--gold);border:1px solid var(--goldDim);border-radius:8px;padding:5px 13px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;transition:.15s}
+#install-btn:hover{background:rgba(201,160,106,.12)}
+#install-btn.show{display:inline-block}
+#menu-toggle{display:none;background:none;border:1px solid var(--line2);color:var(--gold2);border-radius:8px;width:40px;height:38px;font-size:18px;cursor:pointer;flex-shrink:0;font-family:inherit;align-items:center;justify-content:center}
+#menu-toggle:active{background:rgba(201,160,106,.15)}
+@media(max-width:1000px){
+  .cards4{grid-template-columns:repeat(2,1fr)}
+  .dashgrid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  header{padding:0 14px}
+  .hwrap{gap:12px;height:58px;position:relative}
+  #menu-toggle{display:flex}
+  nav{position:fixed;top:58px;left:0;right:0;bottom:auto;flex-direction:column;gap:0;background:linear-gradient(180deg,#221d15,#171310);border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.5);padding:8px 12px 12px;transform:translateY(-140%);transition:transform .22s ease;z-index:99;max-height:calc(100vh - 58px);overflow-y:auto}
+  nav.open{transform:none}
+  nav button{text-align:left;padding:12px 16px;font-size:14.5px;border-radius:10px}
+  nav button.on{color:#1a1610}
+  .hstats{display:none}
+  main{padding:16px 14px 80px}
+  h2.pt{font-size:18px}
+  .stat .n{font-size:24px}
+  .libtools{padding:12px;gap:8px}
+  .libtools input[type=search]{min-width:100%;flex:1 1 100%}
+  .libtools select{flex:1 1 45%}
+  .libtools .cnt{flex:1 1 100%;margin-left:0}
+  .pgrid{grid-template-columns:1fr}
+  .egrid{grid-template-columns:1fr}
+  .row2{grid-template-columns:1fr}
+  .rec{flex-wrap:wrap}
+  .rec .rank{width:auto;padding:0 4px}
+  .kv .k{width:78px}
+  #ctray{padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  #ctray .inner{gap:8px}
+  #ctray .btn{padding:7px 14px;font-size:12.5px}
+  .gwrap{flex-direction:column}
+  .gwrap .btn{width:100%}
+  footer{padding:24px 14px 12px}
+  .modal-bg{padding:16px 10px}
+  .modal .mb{padding:16px 14px}
+  .modal .mh{padding:14px 16px}
+  .modal .mh h3{font-size:16px}
+  .humval{font-size:28px}
+  .dist-row .lb{width:88px;font-size:11px}
+}
+@media(max-width:560px){
+  .cards4{grid-template-columns:1fr}
+  body{font-size:13.5px}
+  .dgrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+@media(hover:none){
+  nav button{padding:10px 14px}
+  .chip{padding:6px 14px}
+  .minibtn{padding:5px 12px;font-size:12px}
+  .glink{padding:7px 14px}
+  .pcard .foot .minibtn{padding:6px 14px;font-size:12.5px}
+}
+
+/* ===== Manual page ===== */
+.manual{max-width:960px}
+.manual h3.mh{font-size:16px;color:var(--gold2);margin:26px 0 10px;font-weight:700;border-left:3px solid var(--gold);padding-left:10px;letter-spacing:.5px}
+.manual h3.mh:first-child{margin-top:0}
+.manual p,.manual li{font-size:13.5px;color:var(--text2);line-height:1.85}
+.manual ol,.manual ul{padding-left:22px;margin:8px 0}
+.manual b{color:var(--text)}
+.manual .kbd{background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:1px 8px;font-size:12px;color:var(--gold2);font-family:Consolas,monospace}
+.manual .tip{background:rgba(122,174,122,.08);border:1px solid rgba(122,174,122,.25);border-radius:10px;padding:12px 16px;margin:12px 0}
+.manual .tip b{color:#9fc79f}
+.manual .warn{background:rgba(212,150,90,.08);border:1px solid rgba(212,150,90,.3);border-radius:10px;padding:12px 16px;margin:12px 0}
+.manual .warn b{color:#e9b98d}
+.manual table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+.manual th{background:var(--panel2);color:var(--gold2);text-align:left;padding:8px 12px}
+.manual td{padding:8px 12px;border-bottom:1px solid var(--line);color:var(--text2);vertical-align:top}
+.manual code{background:var(--panel2);border-radius:4px;padding:1px 6px;font-size:12px;color:#c3abd8;font-family:Consolas,monospace}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="logo">
+      <div class="ring"></div>
+      <div><h1>CIGAR OS 工作台<small>STAR-4L · V2.4 PWA</small></h1></div>
+    </div>
+    <button id="menu-toggle" aria-label="菜单">☰</button>
+    <nav id="nav">
+      <button data-p="dash" class="on">总览</button>
+      <button data-p="lib">型号库</button>
+      <button data-p="taste">智能品鉴</button>
+      <button data-p="pair">配餐顾问</button>
+      <button data-p="hum">养护顾问</button>
+      <button data-p="coll">收藏投资</button>
+      <button data-p="graph">图谱探索</button>
+      <button data-p="ency">知识百科</button>
+      <button data-p="cmp">对比</button>
+      <button data-p="manual">说明书</button>
+    </nav>
+    <div class="hstats">
+      <div><b id="hs-ent">–</b>实体</div>
+      <div><b id="hs-cig">–</b>型号</div>
+      <div><b id="hs-tri">–</b>三元组</div>
+    </div>
+    <button id="install-btn" aria-label="安装应用">⬇ 安装</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 总览 ============ -->
+<section class="page on" id="page-dash">
+  <h2 class="pt">知识底座总览</h2>
+  <p class="pd">STAR-4L 架构：L1 元本体 / L2 原子实体 / L3 关系拓扑 / L4 动态视图 —— 全部数据已装载</p>
+  <div class="grid cards4" style="margin-bottom:16px">
+    <div class="stat"><div class="n" id="d-ent">–</div><div class="l">实体总量</div><div class="s" id="d-entd"></div></div>
+    <div class="stat"><div class="n" id="d-cig">–</div><div class="l">雪茄型号</div><div class="s" id="d-cigd"></div></div>
+    <div class="stat"><div class="n" id="d-tri">–</div><div class="l">知识三元组</div><div class="s" id="d-trid"></div></div>
+    <div class="stat"><div class="n" id="d-ca">–</div><div class="l">CA 95+ 高分型号</div><div class="s">盲评评分体系</div></div>
+  </div>
+  <div class="dashgrid">
+    <div class="panel"><h3>强度分布</h3><div id="dist-strength"></div></div>
+    <div class="panel"><h3>价格档分布</h3><div id="dist-tier"></div></div>
+    <div class="panel"><h3>茄芯产区 Top 12</h3><div id="dist-origin"></div></div>
+    <div class="panel"><h3>CA 评分分布</h3><div id="dist-rating"></div></div>
+  </div>
+  <div class="dashgrid" style="margin-top:14px">
+    <div class="panel"><h3>风味热度 Top 20（出现于型号配方）</h3><div id="dist-flavor"></div></div>
+    <div class="panel"><h3>品牌规模 Top 15（型号数）</h3><div id="dist-brand"></div></div>
+  </div>
+</section>
+
+<!-- ============ 型号库 ============ -->
+<section class="page" id="page-lib">
+  <h2 class="pt">型号库 · <span id="lib-count"></span></h2>
+  <p class="pd">309 款真实型号，每款含完整配方（茄衣/茄套/茄芯）与风味三段。点击卡片查看完整档案。</p>
+  <div class="libtools">
+    <input type="search" id="f-q" placeholder="搜索型号 / 品牌 / 产品线（中英文均可）…">
+    <select id="f-str"><option value="">强度：全部</option></select>
+    <select id="f-tier"><option value="">价格：全部</option></select>
+    <select id="f-orig">
+      <option value="">产地：全部</option>
+      <option value="cuba">古巴</option>
+      <option value="non">非古</option>
+      <option value="lim">限量版</option>
+    </select>
+    <select id="f-ca"><option value="0">CA 评分：不限</option><option value="85">85+</option><option value="88">88+</option><option value="90">90+</option><option value="93">93+</option><option value="95">95+</option></select>
+    <select id="f-sort"><option value="ca">排序：CA 评分</option><option value="name">排序：名称</option><option value="brand">排序：品牌</option></select>
+    <span class="cnt" id="f-cnt"></span>
+  </div>
+  <div class="pgrid" id="lib-grid"></div>
+</section>
+
+<!-- ============ 智能品鉴 ============ -->
+<section class="page" id="page-taste">
+  <h2 class="pt">智能品鉴推荐</h2>
+  <p class="pd">选择你的口味偏好，引擎基于配方与风味三段实时打分推荐（强度匹配 + 风味命中 + 产地聚焦 + CA 评分加成）。</p>
+  <div class="panel" style="margin-bottom:16px">
+    <div class="row2">
+      <div>
+        <h3 style="margin-bottom:8px">① 浓度强度</h3>
+        <div id="t-str" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px">② 产地聚焦</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:7px" id="t-orig">
+          <span class="chip on" data-v="">不限</span>
+          <span class="chip" data-v="cuba">古巴</span>
+          <span class="chip" data-v="non">非古</span>
+          <span class="chip" data-v="lim">限量版</span>
+        </div>
+        <h3 style="margin:14px 0 8px">③ 预算上限</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:7px" id="t-budget">
+          <span class="chip on" data-v="5">不限</span>
+          <span class="chip" data-v="1">中端</span>
+          <span class="chip" data-v="2">中高端</span>
+          <span class="chip" data-v="3">高端</span>
+          <span class="chip" data-v="4">奢华</span>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin:16px 0 8px">④ 风味偏好（可多选）</h3>
+    <div id="t-flavors"></div>
+    <div style="margin-top:16px;text-align:right">
+      <button class="btn ghost" id="t-reset">重置</button>
+      <button class="btn" id="t-go">开始推荐 →</button>
+    </div>
+  </div>
+  <div id="t-results"></div>
+</section>
+
+<!-- ============ 配餐顾问 ============ -->
+<section class="page" id="page-pair">
+  <h2 class="pt">配餐顾问</h2>
+  <p class="pd">基于 L3 图谱的品牌级 pairs_with 配对（51 条置信三元组）+ 15 种配饮实体的强度匹配区间与经典组合。</p>
+  <div class="panel" style="margin-bottom:16px">
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <span class="chip on" id="pm-a" style="font-size:13px;padding:6px 18px">按雪茄找配饮</span>
+      <span class="chip" id="pm-b" style="font-size:13px;padding:6px 18px">按配饮找雪茄</span>
+    </div>
+    <div id="pair-a">
+      <label class="muted">选择雪茄型号：</label>
+      <select id="pa-cigar" style="min-width:420px;max-width:100%"></select>
+      <button class="btn" id="pa-go" style="margin-left:10px">推荐配饮 →</button>
+    </div>
+    <div id="pair-b" style="display:none">
+      <label class="muted">选择配饮：</label>
+      <select id="pb-bev" style="min-width:280px"></select>
+      <button class="btn" id="pb-go" style="margin-left:10px">推荐雪茄 →</button>
+    </div>
+  </div>
+  <div id="pair-results"></div>
+</section>
+
+<!-- ============ 养护顾问 ============ -->
+<section class="page" id="page-hum">
+  <h2 class="pt">养护顾问</h2>
+  <p class="pd">雪茄窖藏环境实时诊断 + L2 工艺/工具实体知识卡。理想区间：温度 18–21°C，湿度 65–72%。</p>
+  <div class="humgrid">
+    <div class="panel">
+      <h3>窖藏温度（°C）</h3>
+      <div class="humval" id="h-temp-v">21</div>
+      <input type="range" id="h-temp" min="8" max="32" step="0.5" value="21">
+      <div style="display:flex;justify-content:space-between" class="muted"><span>8°C</span><span>21°C</span><span>32°C</span></div>
+    </div>
+    <div class="panel">
+      <h3>窖藏湿度（%RH）</h3>
+      <div class="humval" id="h-hum-v">68</div>
+      <input type="range" id="h-hum" min="45" max="85" step="1" value="68">
+      <div style="display:flex;justify-content:space-between" class="muted"><span>45%</span><span>68%</span><span>85%</span></div>
+    </div>
+  </div>
+  <div id="h-diag"></div>
+  <div class="dashgrid" style="margin-top:16px">
+    <div class="panel"><h3>烟叶工艺知识卡（L2·Process）</h3><div id="h-proc"></div></div>
+    <div class="panel"><h3>雪茄工具知识卡（L2·Tool）</h3><div id="h-tool"></div></div>
+  </div>
+</section>
+
+<!-- ============ 收藏投资 ============ -->
+<section class="page" id="page-coll">
+  <h2 class="pt">收藏投资雷达</h2>
+  <p class="pd">按 CA 盲评评分、稀缺性（限量/纪念版）、陈化潜力综合筛选。评级说明：★ 评分驱动 / ◆ 稀缺驱动 / ● 陈化驱动。</p>
+  <div class="libtools">
+    <select id="c-ca"><option value="90">CA ≥ 90</option><option value="92">CA ≥ 92</option><option value="93">CA ≥ 93</option><option value="95" selected>CA ≥ 95</option><option value="96">CA ≥ 96</option><option value="97">CA ≥ 97</option></select>
+    <select id="c-tier"><option value="">价格：全部</option><option value="收藏级">仅收藏级</option><option value="奢华">奢华</option><option value="高端">高端+</option></select>
+    <label class="chip" id="c-lim" style="cursor:pointer">仅限量版</label>
+    <label class="chip" id="c-top25" style="cursor:pointer">仅 CA Top25 2025</label>
+    <select id="c-sort"><option value="ca">排序：CA 评分</option><option value="inv">排序：投资评级</option></select>
+    <span class="cnt" id="c-cnt"></span>
+  </div>
+  <div class="tablewrap"><table class="ct" id="c-table">
+    <thead><tr><th>#</th><th>型号</th><th>品牌</th><th>CA</th><th>投资评级</th><th>价格档</th><th>陈化</th><th>稀缺标签</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <div class="note">投资评级 = CA 评分（40%）+ 稀缺性（限量/纪念/Top25，35%）+ 陈化潜力（25%）。数据仅供参考，不构成投资建议。</div>
+</section>
+
+<!-- ============ 图谱探索 ============ -->
+<section class="page" id="page-graph">
+  <h2 class="pt">知识图谱探索</h2>
+  <p class="pd">6962 条三元组的交互式浏览器。搜索任意实体（型号/品牌/风味/产区/品种/配饮…），沿关系链无限下钻。</p>
+  <div class="panel">
+    <div class="gwrap">
+      <input type="text" id="g-q" class="gsearch" list="g-list" placeholder="输入实体名称，如：Cohiba Siglo VI / 太妃糖 / 干邑 / 比那尔德里奥…">
+      <datalist id="g-list"></datalist>
+      <button class="btn" id="g-go">探索 →</button>
+    </div>
+  </div>
+  <div id="g-node"></div>
+</section>
+
+<!-- ============ 知识百科 ============ -->
+<section class="page" id="page-ency">
+  <h2 class="pt">知识百科</h2>
+  <p class="pd">L2 原子实体层全部 239 个知识实体：品牌 / 风味 / 产区 / 烟草品种 / 工艺 / 工具 / 配饮 / 人物。</p>
+  <div class="enav" id="e-nav"></div>
+  <div class="egrid" id="e-grid"></div>
+</section>
+
+<!-- ============ 对比 ============ -->
+<section class="page" id="page-cmp">
+  <h2 class="pt">多型号对比</h2>
+  <p class="pd">从型号库点击「对比」添加型号（最多 3 款），并排比较配方、强度与风味演进。</p>
+  <div id="cmp-body"></div>
+</section>
+
+<!-- ============ 说明书 ============ -->
+<section class="page" id="page-manual">
+  <h2 class="pt">使用说明书</h2>
+  <p class="pd">Cigar OS V2.4 · 静态 Web 应用 + MCP Server 双组件架构 · 2026-08-21</p>
+  <div class="panel manual">
+
+    <h3 class="mh">一、这是什么</h3>
+    <p>Cigar OS 是一个<b>全球雪茄参数化知识底座</b>（STAR-4L 架构），本工作台是其可视化前端。全部数据——<b>663 个实体、309 款雪茄型号、6962 条知识三元组</b>——内置于应用中，<b>离线可用</b>，无需联网、无需注册。</p>
+    <div class="tip"><b>数据来源：</b>Cigar Aficionado 2025 Top 25 盲评榜单 + 全网专业配对指南，每款型号含完整配方（茄衣/茄套/茄芯）、风味三段、CA 评分、价格档与品吸时长。</div>
+
+    <h3 class="mh">二、九大功能模块速览</h3>
+    <table>
+      <tr><th>模块</th><th>用途</th><th>典型用法</th></tr>
+      <tr><td><b>总览</b></td><td>知识底座全景统计</td><td>看强度/价格/产区/风味分布，快速了解数据全貌</td></tr>
+      <tr><td><b>型号库</b></td><td>309 款型号检索</td><td>搜"Padrón"或"高希霸"；按强度/价格/产地/CA 分筛选排</td></tr>
+      <tr><td><b>智能品鉴</b></td><td>口味偏好推荐引擎</td><td>选强度 + 风味（可多选）→ 得到带打分理由的推荐列表</td></tr>
+      <tr><td><b>配餐顾问</b></td><td>雪茄↔配饮双向匹配</td><td>选一款雪茄推荐 15 种配饮；或反向按酒找茄</td></tr>
+      <tr><td><b>养护顾问</b></td><td>窖藏温湿度诊断</td><td>拖动温度/湿度滑杆，实时诊断甲虫/霉变/干燥风险</td></tr>
+      <tr><td><b>收藏投资</b></td><td>高分稀缺型号雷达</td><td>CA ≥ 95 筛选，看投资评级（评分/稀缺/陈化加权）</td></tr>
+      <tr><td><b>图谱探索</b></td><td>知识图谱导航</td><td>搜任意实体，沿出链/入链无限下钻（如"黑胡椒"有 244 条引用）</td></tr>
+      <tr><td><b>知识百科</b></td><td>全部实体词典</td><td>按类型浏览品牌/风味/产区/品种/工艺/工具知识卡</td></tr>
+      <tr><td><b>对比</b></td><td>多型号横评</td><td>型号库点「+ 对比」加 2–3 款，17 个维度并排比较</td></tr>
+    </table>
+
+    <h3 class="mh">三、安装到桌面 / 手机（PWA）</h3>
+    <p>本应用是 <b>PWA（渐进式 Web 应用）</b>，可像原生 App 一样安装，安装后离线可用：</p>
+    <ul>
+      <li><b>桌面 Chrome / Edge：</b>地址栏右侧安装图标，或点击顶部「<span class="kbd">⬇ 安装</span>」按钮</li>
+      <li><b>iPhone（Safari）：</b>分享 → 「添加到主屏幕」</li>
+      <li><b>Android（Chrome）：</b>菜单 → 「安装应用」/「添加到主屏幕」</li>
+      <li><b>macOS Safari：</b>分享 → 「添加到 Dock」</li>
+    </ul>
+    <div class="warn"><b>注意：</b>本地 file:// 打开（未部署到服务器时）不支持 PWA 安装与 Service Worker，功能不受影响，仅离线缓存与安装不可用。部署版（GitHub Pages / CloudStudio）完整支持。</div>
+
+    <h3 class="mh">四、MCP Server（AI 助手接入）</h3>
+    <p>同一知识库还提供 <b>MCP Server</b>，可让 Claude / Cursor / WorkBuddy 等 AI 客户端直接查询雪茄知识：</p>
+    <ol>
+      <li>安装依赖：<code>pip install fastmcp</code></li>
+      <li>运行测试：<code>python cigar_mcp_server.py</code>（stdio 模式）</li>
+      <li>客户端配置（以通用 MCP 配置为例）：
+<pre style="background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:12px;color:#c3abd8;overflow-x:auto;font-family:Consolas,monospace;margin:8px 0">{
+  "mcpServers": {
+    "cigar-os": {
+      "command": "python",
+      "args": ["C:/path/to/cigar_mcp_server.py"]
+    }
+  }
+}</pre></li>
+      <li>可用工具：<code>search_cigar</code>（型号检索）/ <code>recommend_cigar</code>（品鉴推荐）/ <code>pair_beverage</code>（配餐）/ <code>humidor_check</code>（养护诊断）/ <code>explore_graph</code>（图谱遍历）/ <code>kb_stats</code>（底座统计）</li>
+    </ol>
+
+    <h3 class="mh">五、数据更新与重建</h3>
+    <p>知识库更新后，一条命令重建站点：</p>
+    <ol>
+      <li>编辑 <code>Knowledge_Base/L2_Entity_Dictionary_Part*.json</code>（新增/修改实体）</li>
+      <li>运行 <code>python build_cigar_site.py</code> —— 重新生成 <code>cigar-site/data.js</code></li>
+      <li>把 <code>cigar-site/</code> 整个目录部署到任意静态托管（GitHub Pages / CloudStudio / Vercel）</li>
+    </ol>
+
+    <h3 class="mh">六、文件结构</h3>
+    <table>
+      <tr><th>文件</th><th>说明</th></tr>
+      <tr><td><code>index.html</code></td><td>应用主体（UI + 逻辑），引用 data.js</td></tr>
+      <tr><td><code>data.js</code></td><td>全部知识数据（由构建脚本生成）</td></tr>
+      <tr><td><code>manifest.json</code></td><td>PWA 清单（名称/图标/主题色）</td></tr>
+      <tr><td><code>sw.js</code></td><td>Service Worker（离线缓存）</td></tr>
+      <tr><td><code>icons/</code></td><td>应用图标（192/512/maskable/apple）</td></tr>
+      <tr><td><code>../cigar_mcp_server.py</code></td><td>MCP Server 组件</td></tr>
+      <tr><td><code>../build_cigar_site.py</code></td><td>站点构建脚本</td></tr>
+    </table>
+
+    <h3 class="mh">七、常见问题</h3>
+    <ul>
+      <li><b>Q：评分体系是什么？</b> CA（Cigar Aficionado）100 分制盲评，95+ 即为年度顶级。推荐引擎评分是内部匹配分，与 CA 无关。</li>
+      <li><b>Q：为什么有些型号没有 CA 评分？</b> CA 只对进入盲评的型号打分，未上榜型号显示 –。</li>
+      <li><b>Q：投资评级可信吗？</b> 综合评分/稀缺/陈化的加权参考值，不构成投资建议。</li>
+      <li><b>Q：支持什么语言搜索？</b> 中英文均可——"黑胡椒"、"black pepper"、"高希霸"、"Cohiba" 都能命中。</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<!-- Compare tray -->
+<div id="ctray"><div class="inner">
+  <span class="lbl">对比栏（<span id="ct-n">0</span>/3）</span>
+  <span id="ct-items"></span>
+  <button class="btn" id="ct-go" style="margin-left:auto">开始对比 →</button>
+  <button class="btn ghost" id="ct-clear">清空</button>
+</div></div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="mh"><h3 id="m-title"></h3><button class="x" id="m-x">✕</button></div>
+    <div class="mb" id="m-body"></div>
+  </div>
+</div>
+
+<footer>Cigar OS 工作台 · STAR-4L 参数化知识底座 V2.4 PWA · 663 实体 / 309 型号 / 6962 三元组 · 数据源：Cigar Aficionado 2025 Top 25 + 全网专业配对指南 · 可安装 · 离线可用</footer>
+
+<script src="data.js"></script>
+<script>
+const DATA = window.CIGAR_DATA;
+
+/* ================= 基础索引 ================= */
+const P = DATA.products;                    // 雪茄型号
+const E = {};                               // 非型号实体 id -> entity
+DATA.entities.forEach(e => E[e.id] = e);
+const ALL = {};                             // 全部实体索引（含型号）
+P.forEach(p => ALL[p.id] = p);
+DATA.entities.forEach(e => ALL[e.id] = e);
+
+const TR = DATA.triples;                    // [s,p,o]
+const bySubj = {}, byObj = {};
+TR.forEach(t => {
+  (bySubj[t[0]] = bySubj[t[0]] || []).push(t);
+  (byObj[t[2]] = byObj[t[2]] || []).push(t);
+});
+
+const STR_ORDER = ['Mild','Mild-Medium','Medium','Medium-Full','Full','Full+'];
+const TIER_ORDER = ['中端','中高端','高端','奢华','收藏级'];
+const TIER_RANK = {'中端':1,'中高端':2,'高端':3,'奢华':4,'收藏级':5};
+
+const PRED_ZH = {
+  member_of:'隶属品牌', produced_in:'产自', has_wrapper:'茄衣用叶', has_binder:'茄套用叶',
+  has_filler:'茄芯含叶', exhibits_flavor:'呈现风味', aged_for:'陈化时长', located_in:'位于',
+  pairs_with:'经典配对', founded_in:'创立于', founded_by:'创始人', competes_with:'同业竞品',
+  made_by:'制造商', origin_location:'发源地', category_of:'归类为', recommended_for:'推荐用于',
+  requires:'工艺要求', influences:'影响', derived_from:'源自', originated_from:'起源于',
+  grown_in:'种植于', adjacent_to:'毗邻产区', fermented_by:'发酵工艺', related_flavors:'关联风味',
+  associated_with:'关联人物', cigar_preference:'偏好雪茄', causes:'导致', reduces:'削弱',
+  enhances:'增强', results_in:'产生结果', influenced_by:'受影响于', ideal_aging:'理想陈化'
+};
+const TYPE_ZH = {CigarProduct:'雪茄型号', CigarBrand:'品牌', FlavorConcept:'风味', GeoLocation:'产区',
+  TobaccoVariety:'烟草品种', Process:'工艺', Tool:'工具', PairingBeverage:'配饮', Person:'人物', Concept:'适用场景'};
+
+function entName(id){
+  const e = ALL[id];
+  if(!e) return id;
+  if(e.type === 'CigarProduct') return e.name;
+  return e.name || id;
+}
+function shortName(n){ return n.replace(/\s*\(.*?\)\s*/g,'').trim() || n; }
+
+/* 产区 → 国家链 */
+function countryOf(geoId){
+  let g = E[geoId], hops = 0;
+  while(g && hops < 8){
+    if(g.level === 'Country') return g.id;
+    g = E[g.parent_location]; hops++;
+  }
+  return null;
+}
+function isCuban(p){
+  if(p.filler_origin.some(o => countryOf(o) === 'GEO-CUBA')) return true;
+  const b = E[p.brand];
+  return !!(b && b.attributes && b.attributes.origin_country === 'GEO-CUBA');
+}
+function originText(p){
+  const cs = [...new Set(p.filler_origin.map(o => countryOf(o)).filter(Boolean))];
+  return cs.map(c => shortName(entName(c))).join(' / ') || '—';
+}
+function flavorsOf(p){
+  const f = [...p.flavor_first_third, ...p.flavor_middle_third, ...p.flavor_last_third];
+  return [...new Set(f)];
+}
+function strengthBadge(s){
+  const cls = s==='Full'||s==='Full+' ? 'b-full' : s==='Medium-Full' ? 'b-mf' : s==='Medium' ? 'b-med' : 'b-mild';
+  const zh = s==='Full+' ? '超浓郁' : s==='Full' ? '浓郁' : s==='Medium-Full' ? '中浓郁' : s==='Medium' ? '中等' : s==='Mild-Medium' ? '轻中' : '轻柔';
+  return `<span class="badge ${cls}">${zh}</span>`;
+}
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* 品牌配饮表（pairs_with） */
+const BRAND_BEV = {};   // brandId -> [{bev, conf}]
+TR.forEach(t => {
+  if(t[1] === 'pairs_with' && t[0].startsWith('BRAND-')){
+    (BRAND_BEV[t[0]] = BRAND_BEV[t[0]] || []).push({bev: t[2], conf: t[3] || 0.85});
+  }
+});
+/* 配饮 → 品牌 反向 */
+const BEV_BRAND = {};
+TR.forEach(t => {
+  if(t[1] === 'pairs_with' && t[2].startsWith('BEV-')){
+    (BEV_BRAND[t[2]] = BEV_BRAND[t[2]] || []).push(t[0]);
+  }
+});
+
+/* ================= 导航 ================= */
+document.getElementById('nav').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'page-' + b.dataset.p));
+  document.getElementById('nav').classList.remove('open');
+  document.getElementById('menu-toggle').textContent = '☰';
+  window.scrollTo({top:0});
+});
+
+/* ================= 移动端汉堡菜单 ================= */
+document.getElementById('menu-toggle').addEventListener('click', () => {
+  const nav = document.getElementById('nav');
+  const open = nav.classList.toggle('open');
+  document.getElementById('menu-toggle').textContent = open ? '✕' : '☰';
+});
+document.addEventListener('click', e => {
+  const nav = document.getElementById('nav');
+  if(nav.classList.contains('open') && !nav.contains(e.target) && e.target.id !== 'menu-toggle'){
+    nav.classList.remove('open');
+    document.getElementById('menu-toggle').textContent = '☰';
+  }
+});
+
+/* ================= 总览 ================= */
+function initDash(){
+  const entN = DATA.entities.length, cigN = P.length, triN = TR.length;
+  document.getElementById('d-ent').textContent = entN + P.length;
+  document.getElementById('d-entd').textContent = DATA.entities.length + ' 知识实体 + ' + P.length + ' 型号';
+  document.getElementById('d-cig').textContent = cigN;
+  document.getElementById('d-cigd').textContent = '古巴 ' + P.filter(isCuban).length + ' / 非古 ' + P.filter(p=>!isCuban(p)).length;
+  document.getElementById('d-tri').textContent = triN.toLocaleString();
+  document.getElementById('d-trid').textContent = new Set(TR.map(t=>t[1])).size + ' 种谓词 · ' + new Set(TR.map(t=>t[0])).size + ' 个主语';
+  document.getElementById('d-ca').textContent = P.filter(p => p.ca_rating >= 95).length;
+  document.getElementById('hs-ent').textContent = entN + cigN;
+  document.getElementById('hs-cig').textContent = cigN;
+  document.getElementById('hs-tri').textContent = (triN/1000).toFixed(1) + 'k';
+
+  const bar = (container, rows) => {
+    const max = Math.max(...rows.map(r => r[1]));
+    document.getElementById(container).innerHTML = rows.map(r =>
+      `<div class="dist-row"><div class="lb" title="${esc(r[0])}">${esc(r[0])}</div>
+       <div class="bar"><i style="width:${(r[1]/max*100).toFixed(1)}%"></i></div><div class="num">${r[1]}</div></div>`).join('');
+  };
+  const cnt = arr => { const m = {}; arr.forEach(x => m[x] = (m[x]||0)+1);
+    return Object.entries(m).sort((a,b)=>b[1]-a[1]); };
+
+  bar('dist-strength', cnt(P.map(p => p.strength)).map(([k,v]) => [k==='Full+'?'超浓郁 Full+':k, v]));
+  bar('dist-tier', TIER_ORDER.filter(t => P.some(p=>p.price_tier===t)).map(t => [t, P.filter(p=>p.price_tier===t).length]));
+  const oc = {};
+  P.forEach(p => p.filler_origin.forEach(o => oc[entName(o)] = (oc[entName(o)]||0)+1));
+  bar('dist-origin', Object.entries(oc).sort((a,b)=>b[1]-a[1]).slice(0,12));
+  const rb = [[ '≥98', P.filter(p=>p.ca_rating>=98).length],['95–97', P.filter(p=>p.ca_rating>=95&&p.ca_rating<98).length],
+    ['90–94', P.filter(p=>p.ca_rating>=90&&p.ca_rating<95).length],['85–89', P.filter(p=>p.ca_rating>=85&&p.ca_rating<90).length],
+    ['<85', P.filter(p=>p.ca_rating<85).length]];
+  bar('dist-rating', rb);
+  const fc = {};
+  P.forEach(p => flavorsOf(p).forEach(f => fc[entName(f)] = (fc[entName(f)]||0)+1));
+  bar('dist-flavor', Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,20));
+  const bc = {};
+  P.forEach(p => bc[entName(p.brand)] = (bc[entName(p.brand)]||0)+1);
+  bar('dist-brand', Object.entries(bc).sort((a,b)=>b[1]-a[1]).slice(0,15));
+}
+
+/* ================= 型号库 ================= */
+let libFiltered = [];
+function initLib(){
+  const ss = document.getElementById('f-str');
+  [...new Set(P.map(p => p.strength))].sort((a,b)=>STR_ORDER.indexOf(a)-STR_ORDER.indexOf(b))
+    .forEach(s => { const o = document.createElement('option'); o.value = s;
+      o.textContent = s; ss.appendChild(o); });
+  const ts = document.getElementById('f-tier');
+  TIER_ORDER.forEach(t => { if(P.some(p=>p.price_tier===t)){ const o = document.createElement('option');
+    o.value = t; o.textContent = t; ts.appendChild(o); } });
+  ['f-q','f-str','f-tier','f-orig','f-ca','f-sort'].forEach(id =>
+    document.getElementById(id).addEventListener('input', renderLib));
+  renderLib();
+}
+function renderLib(){
+  const q = document.getElementById('f-q').value.trim().toLowerCase();
+  const str = document.getElementById('f-str').value;
+  const tier = document.getElementById('f-tier').value;
+  const orig = document.getElementById('f-orig').value;
+  const ca = +document.getElementById('f-ca').value;
+  const sort = document.getElementById('f-sort').value;
+  let list = P.filter(p => {
+    if(str && p.strength !== str) return false;
+    if(tier && p.price_tier !== tier) return false;
+    if(ca && (p.ca_rating||0) < ca) return false;
+    if(orig === 'cuba' && !isCuban(p)) return false;
+    if(orig === 'non' && isCuban(p)) return false;
+    if(orig === 'lim' && !p.limited_edition) return false;
+    if(q){
+      const hay = (p.name + ' ' + entName(p.brand) + ' ' + (p.product_line||'') + ' ' + p.vitola).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  if(sort === 'ca') list.sort((a,b) => (b.ca_rating||0)-(a.ca_rating||0));
+  else if(sort === 'name') list.sort((a,b) => a.name.localeCompare(b.name));
+  else list.sort((a,b) => entName(a.brand).localeCompare(entName(b.brand),'zh'));
+  libFiltered = list;
+  document.getElementById('f-cnt').textContent = list.length + ' / ' + P.length + ' 款';
+  document.getElementById('lib-count').textContent = P.length + ' 款';
+  const g = document.getElementById('lib-grid');
+  if(!list.length){ g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🚬</div>没有匹配的型号，试试放宽筛选</div>'; return; }
+  g.innerHTML = list.slice(0, 120).map(p => `
+    <div class="pcard" onclick="openProduct('${p.id}')">
+      <div class="top">
+        <div><div class="nm">${esc(p.name)}</div><div class="brand">${esc(shortName(entName(p.brand)))} · ${esc(p.product_line||'')}</div></div>
+        <div class="ca">${p.ca_rating||'–'}<small>CA</small></div>
+      </div>
+      <div class="meta">
+        ${strengthBadge(p.strength)} <span class="badge b-ora">${esc(originText(p))}</span>
+        <span class="badge b-gold">${esc(p.price_tier)}</span> <span>${esc(p.vitola)}</span>
+        ${p.limited_edition?'<span class="badge b-lim">限量</span>':''}
+        ${p.ca_top25_2025_rank?`<span class="badge b-red">CA Top25 #${p.ca_top25_2025_rank}</span>`:''}
+      </div>
+      <div class="flv">${flavorsOf(p).slice(0,8).map(f => shortName(entName(f))).join(' · ')}</div>
+      <div class="foot"><span class="muted">≈${p.smoke_time_min||'–'} 分钟</span>
+      <button class="minibtn" onclick="event.stopPropagation();addCompare('${p.id}')">+ 对比</button></div>
+    </div>`).join('') + (list.length > 120 ? `<div class="empty" style="grid-column:1/-1">仅显示前 120 款，共 ${list.length} 款，请缩小范围</div>` : '');
+}
+
+/* ================= 型号详情 ================= */
+function openProduct(id){
+  const p = ALL[id]; if(!p || p.type !== 'CigarProduct') return;
+  document.getElementById('m-title').textContent = p.name;
+  const bn = entName(p.brand);
+  const bevs = (BRAND_BEV[p.brand]||[]).map(x => x.bev);
+  document.getElementById('m-body').innerHTML = `
+    <div class="dgrid">
+      <div class="ditem"><div class="k">品牌</div><div class="v">${esc(shortName(bn))}</div></div>
+      <div class="ditem"><div class="k">产品线</div><div class="v">${esc(p.product_line||'—')}</div></div>
+      <div class="ditem"><div class="k">规格 (长×环径)</div><div class="v">${esc(p.vitola)}</div></div>
+      <div class="ditem"><div class="k">强度</div><div class="v">${strengthBadge(p.strength)} ${esc(p.strength)}</div></div>
+      <div class="ditem"><div class="k">CA 盲评</div><div class="v" style="font-family:Georgia,serif;font-size:20px;color:var(--gold)">${p.ca_rating||'–'}</div></div>
+      <div class="ditem"><div class="k">价格档</div><div class="v">${esc(p.price_tier)}</div></div>
+      <div class="ditem"><div class="k">品吸时长</div><div class="v">≈ ${p.smoke_time_min||'–'} 分钟</div></div>
+      <div class="ditem"><div class="k">产地</div><div class="v">${esc(originText(p))}</div></div>
+      ${p.aging_months?`<div class="ditem"><div class="k">陈化</div><div class="v">${p.aging_months} 个月</div></div>`:''}
+      ${p.limited_edition?'<div class="ditem"><div class="k">稀缺</div><div class="v"><span class="badge b-lim">限量版</span></div></div>':''}
+      ${p.ca_top25_2025_rank?`<div class="ditem"><div class="k">榜单</div><div class="v"><span class="badge b-red">CA 2025 Top25 第 ${p.ca_top25_2025_rank} 名</span></div></div>`:''}
+    </div>
+    <div class="sect"><h4>配方 RECIPE</h4>
+      <div class="kv"><span class="k">茄衣 Wrapper</span><span class="v">${esc(entName(p.wrapper))}</span></div>
+      <div class="kv"><span class="k">茄套 Binder</span><span class="v">${esc(entName(p.binder))}</span></div>
+      <div class="kv"><span class="k">茄芯 Filler</span><span class="v">${(p.filler_blend||[]).map(f=>esc(entName(f))).join('、')||'—'}</span></div>
+      <div class="kv"><span class="k">茄芯产地</span><span class="v">${p.filler_origin.map(o=>esc(shortName(entName(o)))).join('、')}</span></div>
+    </div>
+    <div class="sect"><h4>风味三段 FLAVOR JOURNEY</h4>
+      <div class="flavorthird">
+        <div class="ft t1"><div class="t">第一段 · 前段</div>${p.flavor_first_third.map(f=>`<span class="tag-flavor" onclick="jumpGraph('${f}')">${esc(shortName(entName(f)))}</span>`).join('')}</div>
+        <div class="ft t2"><div class="t">第二段 · 中段</div>${p.flavor_middle_third.map(f=>`<span class="tag-flavor" onclick="jumpGraph('${f}')">${esc(shortName(entName(f)))}</span>`).join('')}</div>
+        <div class="ft t3"><div class="t">第三段 · 尾段</div>${p.flavor_last_third.map(f=>`<span class="tag-flavor" onclick="jumpGraph('${f}')">${esc(shortName(entName(f)))}</span>`).join('')}</div>
+      </div>
+    </div>
+    ${bevs.length ? `<div class="sect"><h4>品牌经典配饮（图谱 pairs_with）</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${bevs.map(b=>`<span class="glink" onclick="jumpGraph('${b}')">${esc(entName(b))}</span>`).join('')}</div></div>`:''}
+    ${p.note?`<div class="note">${esc(p.note)}</div>`:''}
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn ghost" onclick="addCompare('${p.id}')">+ 加入对比</button>
+      <button class="btn ghost" onclick="jumpGraph('${p.id}')">在图谱中查看</button>
+    </div>`;
+  document.getElementById('modal-bg').classList.add('on');
+  document.getElementById('modal-bg').scrollTop = 0;
+}
+document.getElementById('m-x').onclick = () => document.getElementById('modal-bg').classList.remove('on');
+document.getElementById('modal-bg').addEventListener('click', e => { if(e.target.id === 'modal-bg') e.target.classList.remove('on'); });
+
+/* ================= 智能品鉴 ================= */
+let tStr = '', tOrig = '', tBudget = 5;
+const tFlavors = new Set();
+function initTaste(){
+  const sBox = document.getElementById('t-str');
+  STR_ORDER.forEach(s => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = s; c.dataset.v = s;
+    c.onclick = () => { document.querySelectorAll('#t-str .chip').forEach(x=>x.classList.toggle('on', x===c)); tStr = s===''? '':s; };
+    sBox.appendChild(c);
+  });
+  document.querySelectorAll('#t-orig .chip').forEach(c => c.onclick = () => {
+    document.querySelectorAll('#t-orig .chip').forEach(x=>x.classList.toggle('on', x===c)); tOrig = c.dataset.v; });
+  document.querySelectorAll('#t-budget .chip').forEach(c => c.onclick = () => {
+    document.querySelectorAll('#t-budget .chip').forEach(x=>x.classList.toggle('on', x===c)); tBudget = +c.dataset.v; });
+  // 风味分组
+  const groups = {};
+  DATA.entities.filter(e => e.type === 'FlavorConcept').forEach(e => {
+    const cat = (e.attributes && e.attributes.category) || '其他';
+    (groups[cat] = groups[cat] || []).push(e);
+  });
+  const catZh = {Woody:'木本',Spice:'香料',Sweet:'甜品',Nut:'坚果',Coffee:'咖啡',Earth:'土腥',Leather:'皮革',
+    Fruit:'果类',Herbal:'草本',Cream:'奶油',Floral:'花香',Smoky:'烟熏','其他':'其他'};
+  document.getElementById('t-flavors').innerHTML = Object.entries(groups).map(([cat, list]) => `
+    <div class="flvgroup"><div class="gt">${catZh[cat]||cat}</div>
+    <div class="gc">${list.sort((a,b)=>a.id.localeCompare(b.id)).map(e =>
+      `<span class="tag-flavor" data-id="${e.id}">${esc(shortName(e.name))}</span>`).join('')}</div></div>`).join('');
+  document.getElementById('t-flavors').addEventListener('click', e => {
+    const c = e.target.closest('.tag-flavor'); if(!c) return;
+    c.classList.toggle('on');
+    c.classList.contains('on') ? tFlavors.add(c.dataset.id) : tFlavors.delete(c.dataset.id);
+  });
+  document.getElementById('t-go').onclick = runTaste;
+  document.getElementById('t-reset').onclick = () => {
+    tStr=''; tOrig=''; tBudget=5; tFlavors.clear();
+    document.querySelectorAll('#t-str .chip,#t-orig .chip,#t-budget .chip').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('#t-flavors .tag-flavor').forEach(x=>x.classList.remove('on'));
+    document.getElementById('t-results').innerHTML = '';
+  };
+}
+function runTaste(){
+  const results = [];
+  P.forEach(p => {
+    let score = 0; const reasons = [];
+    if(TIER_RANK[p.price_tier] > tBudget) return;
+    if(tStr){
+      const a = STR_ORDER.indexOf(p.strength), b = STR_ORDER.indexOf(tStr);
+      if(a === b){ score += 15; reasons.push('强度精准匹配 ' + tStr); }
+      else if(Math.abs(a-b) === 1){ score += 8; reasons.push('强度相邻（' + p.strength + '）'); }
+    }
+    if(tFlavors.size){
+      const pf = new Set(flavorsOf(p));
+      let hit = 0;
+      tFlavors.forEach(f => { if(pf.has(f)){ hit++; reasons.push('风味命中：' + shortName(entName(f))); } });
+      score += hit * 12;
+    }
+    if(tOrig === 'cuba'){ if(isCuban(p)){ score += 8; reasons.push('古巴产地'); } else return; }
+    if(tOrig === 'non'){ if(!isCuban(p)){ score += 8; reasons.push('非古产地'); } else return; }
+    if(tOrig === 'lim'){ if(p.limited_edition){ score += 10; reasons.push('限量版'); } else return; }
+    if((p.ca_rating||0) >= 95){ score += 6; reasons.push('CA ' + p.ca_rating + ' 高分'); }
+    else if((p.ca_rating||0) >= 90){ score += 3; reasons.push('CA ' + p.ca_rating); }
+    if(score > 0) results.push({p, score, reasons});
+  });
+  results.sort((a,b) => b.score - a.score || (b.p.ca_rating||0) - (a.p.ca_rating||0));
+  const box = document.getElementById('t-results');
+  if(!results.length){ box.innerHTML = '<div class="empty"><div class="big">🥃</div>没有找到匹配型号，试着放宽条件</div>'; return; }
+  box.innerHTML = `<div class="panel" style="margin-bottom:14px"><h3>为你推荐 ${Math.min(results.length,10)} 款（共 ${results.length} 款命中）</h3>
+    <span class="muted">条件：${tStr?'强度 '+tStr:'强度不限'} · ${tFlavors.size? '风味 '+[...tFlavors].map(f=>shortName(entName(f))).join('/') : '风味不限'} · ${tOrig==='cuba'?'古巴':tOrig==='non'?'非古':tOrig==='lim'?'限量版':'产地不限'} · 预算${tBudget<5?TIER_ORDER[tBudget-1]:'不限'}</span></div>`
+    + results.slice(0,10).map((r,i) => `
+    <div class="rec">
+      <div class="rank">${i+1}</div>
+      <div class="body">
+        <div class="nm" onclick="openProduct('${r.p.id}')">${esc(r.p.name)}</div>
+        <div class="sub">${esc(shortName(entName(r.p.brand)))} · ${esc(r.p.vitola)} · ${esc(originText(r.p))} · CA ${r.p.ca_rating||'–'} · ${esc(r.p.price_tier)}</div>
+        <div class="reasons">${r.reasons.map(x=>`<span class="rs">${esc(x)}</span>`).join('')}</div>
+      </div>
+      <div class="sc">${r.score}<small>匹配分</small></div>
+    </div>`).join('');
+}
+
+/* ================= 配餐顾问 ================= */
+let pairMode = 'a';
+function initPair(){
+  document.getElementById('pm-a').onclick = () => setPairMode('a');
+  document.getElementById('pm-b').onclick = () => setPairMode('b');
+  const sel = document.getElementById('pa-cigar');
+  [...P].sort((a,b)=>(b.ca_rating||0)-(a.ca_rating||0)).forEach(p => {
+    const o = document.createElement('option'); o.value = p.id;
+    o.textContent = p.name + '（' + shortName(entName(p.brand)) + ' · ' + p.strength + '）';
+    sel.appendChild(o);
+  });
+  const bs = document.getElementById('pb-bev');
+  DATA.entities.filter(e => e.type === 'PairingBeverage').forEach(b => {
+    const o = document.createElement('option'); o.value = b.id; o.textContent = b.name; bs.appendChild(o);
+  });
+  document.getElementById('pa-go').onclick = pairByCigar;
+  document.getElementById('pb-go').onclick = pairByBeverage;
+}
+function setPairMode(m){
+  pairMode = m;
+  document.getElementById('pm-a').classList.toggle('on', m==='a');
+  document.getElementById('pm-b').classList.toggle('on', m==='b');
+  document.getElementById('pair-a').style.display = m==='a' ? '' : 'none';
+  document.getElementById('pair-b').style.display = m==='b' ? '' : 'none';
+}
+function bevCard(b, reasons, score){
+  const a = b.attributes || {};
+  return `<div class="rec">
+    <div class="body">
+      <div class="nm" onclick="jumpGraph('${b.id}')">${esc(b.name)}</div>
+      <div class="sub">${esc(a.beverage_type||'')} · 强度 ${esc(a.strength||'—')} · 甜度 ${esc(a.sweetness||'—')} · 侍饮：${esc(a.serving_temp||'—')}</div>
+      <div style="font-size:12.5px;color:var(--text2);margin:4px 0">${esc(a.pairing_principle||'')}</div>
+      ${a.classic_combo?`<div class="sub">🍸 经典组合：${esc(a.classic_combo)}</div>`:''}
+      <div class="reasons">${reasons.map(x=>`<span class="rs">${esc(x)}</span>`).join('')}</div>
+    </div>
+    <div class="sc">${score}<small>匹配分</small></div>
+  </div>`;
+}
+function pairByCigar(){
+  const p = ALL[document.getElementById('pa-cigar').value];
+  if(!p) return;
+  const brandPairs = BRAND_BEV[p.brand] || [];
+  const scored = [];
+  DATA.entities.filter(e => e.type === 'PairingBeverage').forEach(b => {
+    let score = 0; const reasons = [];
+    const bp = brandPairs.find(x => x.bev === b.id);
+    if(bp){ score += 40; reasons.push('图谱直配（置信度 ' + Math.round((bp.conf||0.85)*100) + '%）'); }
+    const a = b.attributes || {};
+    const bsm = a.best_strength_match || [];
+    if(bsm.includes(p.strength)){ score += 25; reasons.push('强度适配 ' + p.strength); }
+    else if(bsm.length && STR_ORDER.indexOf(p.strength) >= 0){
+      const near = bsm.some(s => Math.abs(STR_ORDER.indexOf(s) - STR_ORDER.indexOf(p.strength)) <= 1);
+      if(near){ score += 12; reasons.push('强度相邻可尝试'); }
+    }
+    const rct = (a.recommended_cigar_types || []).join(' ');
+    if(rct && shortName(entName(p.brand)).toLowerCase().split(' ').some(w => w.length > 3 && rct.toLowerCase().includes(w))){
+      score += 12; reasons.push('该配饮官方推荐品类包含此品牌');
+    }
+    if(score > 0) scored.push({b, score, reasons});
+  });
+  scored.sort((x,y) => y.score - x.score);
+  const bn = shortName(entName(p.brand));
+  document.getElementById('pair-results').innerHTML = `
+    <div class="panel" style="margin-bottom:14px"><h3>${esc(p.name)} 的配饮推荐</h3>
+    <span class="muted">${esc(bn)} · ${strengthBadge(p.strength)} ${esc(p.strength)} · 风味：${flavorsOf(p).slice(0,6).map(f=>shortName(entName(f))).join('、')}</span></div>`
+    + (scored.length ? scored.slice(0,8).map(x => bevCard(x.b, x.reasons, x.score)).join('')
+       : '<div class="empty">暂无强关联配饮，可尝试中等强度咖啡或气泡水</div>');
+}
+function pairByBeverage(){
+  const bev = E[document.getElementById('pb-bev').value];
+  if(!bev) return;
+  const brands = BEV_BRAND[bev.id] || [];
+  const bsm = (bev.attributes && bev.attributes.best_strength_match) || [];
+  let list = P.filter(p => brands.includes(p.brand));
+  if(bsm.length) list.sort((a,b) => {
+    const sa = bsm.includes(a.strength) ? 0 : 1, sb = bsm.includes(b.strength) ? 0 : 1;
+    return sa - sb || (b.ca_rating||0) - (a.ca_rating||0);
+  });
+  else list.sort((a,b) => (b.ca_rating||0)-(a.ca_rating||0));
+  document.getElementById('pair-results').innerHTML = `
+    <div class="panel" style="margin-bottom:14px"><h3>与 ${esc(bev.name)} 经典配对的雪茄</h3>
+    <span class="muted">${brands.length ? '图谱配对品牌：' + brands.map(x=>esc(shortName(entName(x)))).join('、') : '按强度区间推荐'}${bsm.length?' · 适配强度：'+bsm.join('/') : ''}</span></div>`
+    + (list.length ? list.slice(0,12).map((p,i) => `
+      <div class="rec"><div class="rank">${i+1}</div>
+        <div class="body">
+          <div class="nm" onclick="openProduct('${p.id}')">${esc(p.name)}</div>
+          <div class="sub">${esc(shortName(entName(p.brand)))} · ${esc(p.vitola)} · ${esc(originText(p))} · ${esc(p.price_tier)}</div>
+          <div class="reasons">${bsm.includes(p.strength)?'<span class="rs">强度精准适配</span>':''}${(p.ca_rating||0)>=93?`<span class="rs">CA ${p.ca_rating}</span>`:''}</div>
+        </div>
+        <div class="sc">${p.ca_rating||'–'}<small>CA 评分</small></div>
+      </div>`).join('') : '<div class="empty">该配饮暂无图谱直配品牌</div>');
+}
+
+/* ================= 养护顾问 ================= */
+function initHum(){
+  const tEl = document.getElementById('h-temp'), hEl = document.getElementById('h-hum');
+  const upd = () => {
+    const t = +tEl.value, h = +hEl.value;
+    document.getElementById('h-temp-v').textContent = t;
+    document.getElementById('h-hum-v').textContent = h;
+    renderHum(t, h);
+  };
+  tEl.addEventListener('input', upd); hEl.addEventListener('input', upd);
+  upd();
+}
+function renderHum(t, h){
+  let tStatus, tMsgs = [];
+  if(t < 16){ tStatus = 'bad'; tMsgs.push('温度过低：会减缓雪茄陈化进程，油脂与香气无法转化', '建议将温度缓慢提升至 18–21°C（每次调 2°C 以内，防止茄衣开裂）'); }
+  else if(t < 18){ tStatus = 'warn'; tMsgs.push('温度偏低：陈化速度放缓，可接受但非理想', '建议提升至 18–21°C 理想区间'); }
+  else if(t <= 21){ tStatus = 'ok'; tMsgs.push('温度理想（18–21°C）：陈化与养护的黄金区间'); }
+  else if(t <= 23){ tStatus = 'warn'; tMsgs.push('温度略高：建议控制在 21°C 以下，降低烟草甲虫孵化风险', '若长期 >22°C，建议检查是否有虫孔（针眼大小圆孔）'); }
+  else { tStatus = 'bad'; tMsgs.push('温度过高：加速雪茄老化、挥发物流失，且烟草甲虫虫卵在高温下开始孵化', '立即降温至 21°C 以下；已发现虫害可将雪茄密封冷冻处理（-18°C 72小时 + 缓慢回温）'); }
+  let hStatus, hMsgs = [];
+  if(h < 62){ hStatus = 'bad'; hMsgs.push('湿度过低：茄衣发脆、开裂风险高，抽吸灼热辛辣', '使用蒸馏水/保湿液补充至 65–72%'); }
+  else if(h < 65){ hStatus = 'warn'; hMsgs.push('湿度略低：短期无碍，长期会使口感偏干', '建议微调至 65–72%'); }
+  else if(h <= 72){ hStatus = 'ok'; hMsgs.push('湿度理想（65–72%）：燃烧与口感最佳平衡'); }
+  else if(h <= 75){ hStatus = 'warn'; hMsgs.push('湿度略高：抽吸可能不畅、燃烧不匀，长期有霉变风险', '减少加湿或放入干燥剂缓释调节'); }
+  else { hStatus = 'bad'; hMsgs.push('湿度过高：发霉高危（白色粉末状霉斑 vs 茄衣结晶白霜需区分）', '立即降低湿度；霉变雪茄必须整支废弃，避免污染窖藏'); }
+  const cls = (tStatus==='bad'||hStatus==='bad') ? 'bad' : (tStatus==='warn'||hStatus==='warn') ? 'warn' : 'ok';
+  const tZh = {ok:'正常', warn:'注意', bad:'异常'};
+  document.getElementById('h-diag').innerHTML = `
+    <div class="diag ${cls}">
+      <h4>${cls==='ok'?'✓ 窖藏环境健康' : cls==='warn'?'⚠ 环境需要调整' : '✕ 环境处于危险区间'} —— 综合 ${tZh[tStatus]} / ${tZh[hStatus]}</h4>
+      <ul>
+        <li><b>温度 ${t}°C（${tZh[tStatus]}）：</b>${tMsgs[0]}；${tMsgs[1]||''}</li>
+        <li><b>湿度 ${h}%RH（${tZh[hStatus]}）：</b>${hMsgs[0]}；${hMsgs[1]||''}</li>
+        ${(t > 21 && h > 70) ? '<li style="color:#e89a8d"><b>复合风险：</b>高温+高湿 = 烟草甲虫孵化与霉变的双重高危组合，优先处理。</li>' : ''}
+        <li class="muted">黄金参数：温度 18–21°C · 湿度 65–72% · 避光 · 定期通风（每周开盒 5 分钟）· 雪茄与雪茄间留 3mm 空隙</li>
+      </ul>
+    </div>`;
+  // 工艺卡
+  document.getElementById('h-proc').innerHTML = DATA.entities.filter(e => e.type === 'Process').map(e => {
+    const a = e.attributes || {};
+    return `<div class="ecard" style="margin-bottom:10px"><div class="nm" onclick="jumpGraph('${e.id}')">${esc(e.name)}</div>
+    <div class="tp">${esc(a.process_type||'')} ${a.duration?('· '+esc(a.duration)):''}</div>
+    <div class="kv"><span class="k">要点</span><span class="v">${esc((a.description||'').slice(0,90))}…</span></div></div>`;
+  }).join('');
+  document.getElementById('h-tool').innerHTML = DATA.entities.filter(e => e.type === 'Tool').map(e => {
+    const a = e.attributes || {};
+    return `<div class="ecard" style="margin-bottom:10px"><div class="nm" onclick="jumpGraph('${e.id}')">${esc(e.name)}</div>
+    <div class="tp">${esc(a.tool_type||'')} · ${esc(a.sub_type||'')}</div>
+    <div class="kv"><span class="k">要点</span><span class="v">${esc((a.description||'').slice(0,90))}…</span></div></div>`;
+  }).join('');
+}
+
+/* ================= 收藏投资 ================= */
+let cLim = false, cTop25 = false;
+function initColl(){
+  document.getElementById('c-lim').onclick = function(){ cLim = !cLim; this.classList.toggle('on', cLim); renderColl(); };
+  document.getElementById('c-top25').onclick = function(){ cTop25 = !cTop25; this.classList.toggle('on', cTop25); renderColl(); };
+  ['c-ca','c-tier','c-sort'].forEach(id => document.getElementById(id).addEventListener('change', renderColl));
+  renderColl();
+}
+function invScore(p){
+  let s = 0; const tags = [];
+  const ca = p.ca_rating || 0;
+  s += (ca - 80) * 2.5;                       // 40% 评分
+  if(p.limited_edition){ s += 25; tags.push('限量'); }
+  if(/周年|纪念|Anniversary|Reserva|Limited|Edici/i.test(p.name + ' ' + (p.product_line||''))){ s += 8; tags.push('纪念款'); }
+  if(p.ca_top25_2025_rank){ s += 15; tags.push('CA Top25 #' + p.ca_top25_2025_rank); }
+  if(p.price_tier === '收藏级'){ s += 12; tags.push('收藏级'); }
+  if(p.aging_months && p.aging_months >= 24){ s += 10; tags.push('陈化' + p.aging_months + '月'); }
+  s = Math.round(s);
+  return {s, tags};
+}
+function renderColl(){
+  const ca = +document.getElementById('c-ca').value;
+  const tier = document.getElementById('c-tier').value;
+  const sort = document.getElementById('c-sort').value;
+  let list = P.filter(p => {
+    if((p.ca_rating||0) < ca) return false;
+    if(tier === '高端+' && !['高端','奢华','收藏级'].includes(p.price_tier)) return false;
+    if(tier && tier !== '高端+' && p.price_tier !== tier) return false;
+    if(cLim && !p.limited_edition) return false;
+    if(cTop25 && !p.ca_top25_2025_rank) return false;
+    return true;
+  }).map(p => ({p, inv: invScore(p)}));
+  if(sort === 'ca') list.sort((a,b) => (b.p.ca_rating||0)-(a.p.ca_rating||0));
+  else list.sort((a,b) => b.inv.s - a.inv.s);
+  document.getElementById('c-cnt').textContent = list.length + ' 款';
+  const tb = document.querySelector('#c-table tbody');
+  tb.innerHTML = list.map((x,i) => {
+    const p = x.p, inv = x.inv;
+    return `<tr>
+      <td class="r">${i+1}</td>
+      <td class="nmw" onclick="openProduct('${p.id}')">${esc(p.name)}${p.release_year?` <span class="muted">(${p.release_year})</span>`:''}</td>
+      <td>${esc(shortName(entName(p.brand)))}</td>
+      <td class="r">${p.ca_rating||'–'}</td>
+      <td><b style="color:var(--gold2)">${inv.s}</b> <span class="muted">${inv.s>=110?'◆ 稀缺驱动':inv.s>=90?'★ 高分驱动':'● 常规'}</span></td>
+      <td>${esc(p.price_tier)}</td>
+      <td>${p.aging_months ? p.aging_months+' 月' : '—'}</td>
+      <td>${inv.tags.map(t=>`<span class="badge b-gold" style="margin-right:4px">${esc(t)}</span>`).join('')||'—'}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" class="empty">该筛选条件下无型号</td></tr>';
+}
+
+/* ================= 图谱探索 ================= */
+let gHistory = [];
+function initGraph(){
+  const dl = document.getElementById('g-list');
+  const opts = [];
+  P.forEach(p => opts.push(p.name));
+  DATA.entities.forEach(e => opts.push(e.name));
+  dl.innerHTML = [...new Set(opts)].map(n => `<option value="${esc(n)}">`).join('');
+  document.getElementById('g-go').onclick = graphGo;
+  document.getElementById('g-q').addEventListener('keydown', e => { if(e.key === 'Enter') graphGo(); });
+}
+function findByName(n){
+  const nn = n.trim().toLowerCase();
+  return ALL[Object.keys(ALL).find(id => ALL[id].name && ALL[id].name.toLowerCase() === nn)]
+    || P.find(p => p.name.toLowerCase().includes(nn))
+    || DATA.entities.find(e => e.name.toLowerCase().includes(nn))
+    || DATA.entities.find(e => shortName(e.name).toLowerCase() === nn);
+}
+function graphGo(){
+  const q = document.getElementById('g-q').value;
+  const e = findByName(q);
+  if(!e){ document.getElementById('g-node').innerHTML = '<div class="empty"><div class="big">🔍</div>未找到该实体</div>'; return; }
+  showNode(e.id, true);
+}
+function jumpGraph(id){
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x.dataset.p === 'graph'));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'page-graph'));
+  document.getElementById('modal-bg').classList.remove('on');
+  window.scrollTo({top:0});
+  showNode(id, true);
+}
+function showNode(id, resetHist){
+  const e = ALL[id];
+  if(!e) return;
+  if(resetHist) gHistory = [id]; else if(gHistory[gHistory.length-1] !== id) gHistory.push(id);
+  const out = bySubj[id] || [], inc = byObj[id] || [];
+  const groupBy = (list, dir) => {
+    const g = {};
+    list.forEach(t => { (g[t[1]] = g[t[1]] || []).push(t); });
+    return Object.entries(g).sort((a,b) => b[1].length - a[1].length);
+  };
+  const linkHtml = (t, dir) => {
+    const other = dir === 'out' ? t[2] : t[0];
+    return `<span class="glink" onclick="showNode('${other}')">${esc(entName(other))}<span class="dir">${ALL[other] ? TYPE_ZH[ALL[other].type]||'' : ''}</span></span>`;
+  };
+  const tzh = TYPE_ZH[e.type] || e.type;
+  document.getElementById('g-node').innerHTML = `
+    <div class="gnode">
+      <div class="gback">
+        ${gHistory.length > 1 ? `<button class="btn ghost" onclick="gBack()">← 返回上级</button>` : ''}
+        <button class="btn ghost" onclick="document.getElementById('g-q').value='${esc(e.name).replace(/'/g,"\\'")}'">选中到搜索框</button>
+      </div>
+      <div class="ghead">
+        <h3>${esc(e.name)}</h3>
+        <span class="badge b-gold">${tzh}</span>
+        ${e.type === 'CigarProduct' ? `<button class="btn ghost" onclick="openProduct('${e.id}')">查看完整档案</button>` : ''}
+        <span class="muted">${out.length} 条出链 · ${inc.length} 条入链</span>
+      </div>
+      ${e.attributes ? `<div class="panel" style="margin-bottom:14px">${
+        Object.entries(e.attributes).filter(([k,v]) => typeof v === 'string' || typeof v === 'number').slice(0,6).map(([k,v]) =>
+          `<div class="kv"><span class="k">${esc(k)}</span><span class="v">${esc(String(v).slice(0,160))}</span></div>`).join('')
+      }</div>` : ''}
+      ${out.length ? `<div class="panel"><h3>出链关系（以此实体为主语）</h3>
+        ${groupBy(out, 'out').map(([pred, ts]) => `
+          <div class="gpred"><div class="pt">${esc(PRED_ZH[pred]||pred)} <span class="muted">· ${ts.length}</span></div>
+          <div class="items">${ts.slice(0,40).map(t => linkHtml(t,'out')).join('')}${ts.length>40?`<span class="muted">…等 ${ts.length} 条</span>`:''}</div></div>`).join('')}
+      </div>` : ''}
+      ${inc.length ? `<div class="panel" style="margin-top:14px"><h3>入链关系（其他实体指向它）</h3>
+        ${groupBy(inc, 'in').map(([pred, ts]) => `
+          <div class="gpred"><div class="pt">${esc(PRED_ZH[pred]||pred)} <span class="muted">· ${ts.length} · 被指向</span></div>
+          <div class="items">${ts.slice(0,40).map(t => linkHtml(t,'in')).join('')}${ts.length>40?`<span class="muted">…等 ${ts.length} 条</span>`:''}</div></div>`).join('')}
+      </div>` : ''}
+      ${(!out.length && !inc.length) ? '<div class="empty">该实体暂无图谱关系</div>' : ''}
+    </div>`;
+}
+function gBack(){
+  if(gHistory.length > 1){ gHistory.pop(); showNode(gHistory[gHistory.length-1], false); }
+}
+
+/* ================= 知识百科 ================= */
+const ENAV = ['CigarBrand','FlavorConcept','GeoLocation','TobaccoVariety','Process','Tool','PairingBeverage','Person','Concept'];
+let eType = 'CigarBrand';
+function initEncy(){
+  document.getElementById('e-nav').innerHTML = ENAV.map((t,i) =>
+    `<span class="chip ${i===0?'on':''}" data-t="${t}">${TYPE_ZH[t]}（${DATA.entities.filter(e=>e.type===t).length}）</span>`).join('');
+  document.getElementById('e-nav').addEventListener('click', e => {
+    const c = e.target.closest('.chip'); if(!c) return;
+    document.querySelectorAll('#e-nav .chip').forEach(x => x.classList.toggle('on', x===c));
+    eType = c.dataset.t; renderEncy();
+  });
+  renderEncy();
+}
+function renderEncy(){
+  const list = DATA.entities.filter(e => e.type === eType)
+    .sort((a,b) => (b.attributes && a.attributes) ? 0 : 0);
+  document.getElementById('e-grid').innerHTML = list.map(e => {
+    const a = e.attributes || {};
+    const keys = Object.keys(a).filter(k => typeof a[k] === 'string' || typeof a[k] === 'number' || Array.isArray(a[k]));
+    return `<div class="ecard">
+      <div class="nm" onclick="jumpGraph('${e.id}')">${esc(e.name)}</div>
+      <div class="tp">${esc(PRED_ZH.category_of?'':TYPE_ZH[e.type])}${a.category?(' · '+esc(a.category)):''}${a.level?(' · '+esc(a.level)):''}${a.tool_type?(' · '+esc(a.tool_type)):''}</div>
+      ${keys.slice(0,7).map(k => {
+        let v = a[k];
+        if(Array.isArray(v)) v = v.join('、');
+        return `<div class="kv"><span class="k">${esc(k)}</span><span class="v">${esc(String(v).slice(0,110))}</span></div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+/* ================= 对比 ================= */
+const cmpList = [];
+function addCompare(id){
+  if(cmpList.includes(id)){ return; }
+  if(cmpList.length >= 3){ alert('最多对比 3 款，请先移除一款'); return; }
+  cmpList.push(id);
+  renderTray();
+}
+function rmCompare(id){
+  const i = cmpList.indexOf(id);
+  if(i >= 0) cmpList.splice(i,1);
+  renderTray(); renderCmp();
+}
+function renderTray(){
+  const tr = document.getElementById('ctray');
+  tr.classList.toggle('on', cmpList.length > 0);
+  document.getElementById('ct-n').textContent = cmpList.length;
+  document.getElementById('ct-items').innerHTML = cmpList.map(id => {
+    const p = ALL[id];
+    return `<span class="citem">${esc(p.name)} <span class="rm" onclick="rmCompare('${id}')">✕</span></span>`;
+  }).join('');
+}
+document.getElementById('ct-clear').onclick = () => { cmpList.length = 0; renderTray(); renderCmp(); };
+document.getElementById('ct-go').onclick = () => {
+  if(cmpList.length < 2){ alert('请至少添加 2 款型号（在型号库点「+ 对比」）'); return; }
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x.dataset.p === 'cmp'));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('on', p.id === 'page-cmp'));
+  window.scrollTo({top:0});
+  renderCmp();
+};
+function renderCmp(){
+  const box = document.getElementById('cmp-body');
+  if(cmpList.length < 2){ box.innerHTML = '<div class="empty"><div class="big">⚖️</div>前往「型号库」，点击卡片上的「+ 对比」添加至少 2 款型号</div>'; return; }
+  const ps = cmpList.map(id => ALL[id]);
+  const row = (label, fn) => `<tr><td>${label}</td>${ps.map(fn).join('')}</tr>`;
+  document.querySelector('#page-cmp .pd').textContent = `当前对比 ${ps.length} 款：${ps.map(p=>p.name).join(' vs ')}`;
+  box.innerHTML = `<div class="tablewrap"><table class="ct cmptable">
+    ${row('型号', p => `<td class="nmw" onclick="openProduct('${p.id}')">${esc(p.name)}</td>`)}
+    ${row('品牌', p => `<td>${esc(shortName(entName(p.brand)))}</td>`)}
+    ${row('产品线', p => `<td>${esc(p.product_line||'—')}</td>`)}
+    ${row('规格', p => `<td>${esc(p.vitola)}</td>`)}
+    ${row('强度', p => `<td>${strengthBadge(p.strength)} ${esc(p.strength)}</td>`)}
+    ${row('CA 评分', p => `<td class="r">${p.ca_rating||'–'}</td>`)}
+    ${row('价格档', p => `<td>${esc(p.price_tier)}</td>`)}
+    ${row('产地', p => `<td>${esc(originText(p))}</td>`)}
+    ${row('茄衣', p => `<td>${esc(entName(p.wrapper))}</td>`)}
+    ${row('茄套', p => `<td>${esc(entName(p.binder))}</td>`)}
+    ${row('茄芯配方', p => `<td>${(p.filler_blend||[]).map(f=>esc(shortName(entName(f)))).join('、')||'—'}</td>`)}
+    ${row('前段风味', p => `<td>${p.flavor_first_third.map(f=>esc(shortName(entName(f)))).join('、')}</td>`)}
+    ${row('中段风味', p => `<td>${p.flavor_middle_third.map(f=>esc(shortName(entName(f)))).join('、')}</td>`)}
+    ${row('尾段风味', p => `<td>${p.flavor_last_third.map(f=>esc(shortName(entName(f)))).join('、')}</td>`)}
+    ${row('品吸时长', p => `<td>≈ ${p.smoke_time_min||'–'} 分钟</td>`)}
+    ${row('陈化', p => `<td>${p.aging_months ? p.aging_months+' 个月' : '—'}</td>`)}
+    ${row('稀缺标签', p => `<td>${p.limited_edition?'<span class="badge b-lim">限量</span> ':''}${p.ca_top25_2025_rank?`<span class="badge b-red">Top25 #${p.ca_top25_2025_rank}</span>`:''}${!p.limited_edition&&!p.ca_top25_2025_rank?'—':''}</td>`)}
+  </table></div>`;
+}
+
+/* ================= 启动 ================= */
+initDash(); initLib(); initTaste(); initPair(); initHum(); initColl(); initGraph(); initEncy(); renderCmp();
+
+/* ================= PWA：Service Worker + 安装提示 ================= */
+if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-btn').classList.add('show');
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('install-btn').classList.remove('show');
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-btn').classList.remove('show');
+});
+</script>
+</body>
+</html>

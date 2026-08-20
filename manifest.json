@@ -1,0 +1,26 @@
+{
+  "name": "Cigar OS 工作台 · 全球雪茄参数化知识底座",
+  "short_name": "Cigar OS",
+  "description": "667 实体 / 309 型号 / 6962 三元组的雪茄参数化知识底座：智能品鉴推荐、配餐顾问、养护诊断、收藏投资雷达、知识图谱探索。离线可用。",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#16130f",
+  "theme_color": "#16130f",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["lifestyle", "food", "reference", "education"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "智能品鉴推荐", "short_name": "品鉴", "url": "./index.html#taste", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "型号库", "short_name": "型号", "url": "./index.html#lib", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "配餐顾问", "short_name": "配餐", "url": "./index.html#pair", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
